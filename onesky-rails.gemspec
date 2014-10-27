@@ -8,9 +8,9 @@ Gem::Specification.new do |spec|
   spec.version       = Onesky::Rails::VERSION
   spec.authors       = ["Victor Lam"]
   spec.email         = ["victorebox@yahoo.com.hk"]
-  spec.summary       = %q{TODO: Write a short summary. Required.}
-  spec.description   = %q{TODO: Write a longer description. Optional.}
-  spec.homepage      = ""
+  spec.summary       = "Rails plugin to sync string files with OneSky"
+  spec.description   = "Integrate Rails app with OneSky that provide `push` and `pull` rake command to sync string files"
+  spec.homepage      = "https://github.com/onesky/onesky-rails"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
@@ -18,6 +18,9 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
+  spec.add_dependency "onesky-ruby", "~> 0.0.1"
+
   spec.add_development_dependency "bundler", "~> 1.5"
-  spec.add_development_dependency "rake"
+  spec.add_development_dependency "rake", "~> 10.3"
+  spec.add_development_dependency "rspec", "~> 3.1"
 end
