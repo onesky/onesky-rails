@@ -1,0 +1,15 @@
+#
+# To load your OneSky details from the environment
+# just add some erb tags like this.
+#
+#   api_key:     <%%= ENV["ONESKY_API_KEY"] %>
+#   api_secret:  <%%= ENV["ONESKY_API_SECRET"] %>
+#   project_id:  <%%= ENV["ONESKY_PROJECT_ID"] %>
+#
+---
+api_key: <%= config_hash[:api_key] %>
+api_secret: <%= config_hash[:api_secret] %>
+project_id: <%= config_hash[:project_id] %>
+
+push:
+  is_keeping_all_string: true
