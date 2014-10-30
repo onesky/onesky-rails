@@ -37,5 +37,11 @@ def stub_language_request(api_key, api_secret, project_id)
 end
 
 def languages_response
-  {data: [{code: 'en', is_base_language: true}]}
+  {data: 
+    [
+      {code: 'en', is_base_language: true},
+      {code: 'ja', is_base_language: false},
+      {code: 'zh-TW', is_base_language: false}
+    ]
+  }
 end

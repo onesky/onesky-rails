@@ -14,7 +14,16 @@ describe Onesky::Rails::Client do
       stub_request(:get, full_path_with_auth_hash("/projects/#{project_id}/languages", api_key, api_secret))
         .to_return(status: 200, body: success_response.to_json)
 
-      expect(Onesky::Rails::Client.new(api_key, api_secret, project_id)).to be_a(Onesky::Rails::Client)
+      client = Onesky::Rails::Client.new(api_key, api_secret, project_id)
+      expect(client.base_locale).to eq(I18n.default_locale)
+    end
+
+    it 'save locale of languages activated at OneSky' do
+      stub_request(:get, full_path_with_auth_hash("/projects/#{project_id}/languages", api_key, api_secret))
+        .to_return(status: 200, body: success_response.to_json)
+
+      client = Onesky::Rails::Client.new(api_key, api_secret, project_id)
+      expect(client.onesky_locales).to eq(['ja', 'zh_TW'])
     end
 
     it 'with incorrect credentials' do
