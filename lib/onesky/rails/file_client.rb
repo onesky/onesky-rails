@@ -9,9 +9,8 @@ module Onesky
       FILE_FORMAT = 'RUBY_YAML'
 
       def upload(string_path)
-        path_prefix = ::Rails.root.join("config/locales/").to_s
         get_default_locale_files(string_path).map do |path|
-          filename = path.sub(path_prefix, '')
+          filename = path.sub(string_path, '')
           puts "Uploading #{filename}"
           @project.upload_file(file: path, file_format: FILE_FORMAT)
           path
