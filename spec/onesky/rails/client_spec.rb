@@ -1,15 +1,12 @@
 require 'spec_helper'
-require 'I18n'
-require 'onesky'
-require 'onesky/rails'
 
-describe 'Onesky::Rails::Client' do
+describe Onesky::Rails::Client do
 
   let(:api_key) {'fakeapi'}
   let(:api_secret) {'fakesecret'}
   let(:project_id) {99}
 
-  let(:success_response) {{data: [{code: 'en', is_base_language: true}]}}
+  let(:success_response) {languages_response}
 
   describe 'verify config' do
 
@@ -35,7 +32,6 @@ describe 'Onesky::Rails::Client' do
     end
 
     it 'with mis-match locale' do
-      I18n.enforce_available_locales = false
       I18n.default_locale = :ja
 
       stub_request(:get, full_path_with_auth_hash("/projects/#{project_id}/languages", api_key, api_secret))
