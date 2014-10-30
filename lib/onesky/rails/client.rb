@@ -1,5 +1,4 @@
 require 'onesky'
-require 'I18n'
 
 module Onesky
   module Rails
