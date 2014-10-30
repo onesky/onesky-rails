@@ -1,7 +1,3 @@
-require "onesky/rails/version"
-
-module Onesky
-  module Rails
-    # Your code goes here...
-  end
-end
+require 'onesky/rails/version'
+require 'onesky/rails/file_client'
+require 'onesky/rails/railtie.rb' if defined? Rails
