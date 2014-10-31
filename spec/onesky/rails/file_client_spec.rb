@@ -2,19 +2,16 @@ require 'spec_helper'
 
 describe Onesky::Rails::FileClient do
 
-  let(:api_key) {'fakeapi'}
-  let(:api_secret) {'fakesecret'}
-  let(:project_id) {99}
-  let(:client) {Onesky::Rails::FileClient.new(api_key, api_secret, project_id)}
+  let(:client) {Onesky::Rails::FileClient.new(config_hash)}
   let(:file_path) { File.expand_path("../../../fixtures/locales", __FILE__) }
 
   before(:each) do
-    stub_language_request(api_key, api_secret, project_id)
+    stub_language_request(config_hash['api_key'], config_hash['api_secret'], config_hash['project_id'])
   end
 
   context '#upload' do
     it "uploads base locale YAML files" do
-      stub_request(:post, full_path_with_auth_hash("/projects/#{project_id}/files", api_key, api_secret))
+      stub_request(:post, full_path_with_auth_hash("/projects/#{config_hash['project_id']}/files", config_hash['api_key'], config_hash['api_secret']))
         .to_return(status: 201)
 
       expect(client.upload(file_path)).to eq(["#{file_path}/en.yml"])
@@ -56,7 +53,7 @@ describe Onesky::Rails::FileClient do
     end
 
     it 'download translations from OneSky and save as YAML files' do
-      stub_request(:get, full_path_with_auth_hash("/projects/#{project_id}/translations", api_key, api_secret) + query_string)
+      stub_request(:get, full_path_with_auth_hash("/projects/#{config_hash['project_id']}/translations", config_hash['api_key'], config_hash['api_secret']) + query_string)
         .to_return(
           status: 200,
           body: File.read(File.join(file_path, file_name)),

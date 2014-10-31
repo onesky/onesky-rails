@@ -4,11 +4,16 @@ module Onesky
   module Rails
 
     class Client
-      attr_accessor :client, :project, :base_locale, :onesky_locales
+      attr_accessor :client, :project, :base_locale, :onesky_locales, :config
 
-      def initialize(api_key, api_secret, project_id)
-        @client = ::Onesky::Client.new(api_key, api_secret)
-        @project = @client.project(project_id.to_i)
+      def initialize(config_hash)
+        unless is_valid_config! config_hash
+          raise ArgumentError, 'Invalid config. Please check if `api_key`, `api_secret` and `project_id` exist.'
+        end
+
+        @config = config_hash
+        @client = ::Onesky::Client.new(@config['api_key'], @config['api_secret'])
+        @project = @client.project(@config['project_id'].to_i)
         @base_locale = ::I18n.default_locale
         @onesky_locales = []
 
@@ -16,6 +21,10 @@ module Onesky
       end
 
       private
+
+      def is_valid_config!(config)
+        config.has_key?('api_key') && config.has_key?('api_secret') && config.has_key?('project_id')
+      end
 
       # Verify credentials and project access right
       # by initial a request to retrieve languages

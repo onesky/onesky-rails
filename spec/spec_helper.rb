@@ -7,13 +7,14 @@ require 'onesky'
 WebMock.disable_net_connect!(allow_localhost: true)
 
 RSpec.configure do |config|
+  original_locale = I18n.default_locale
   config.before(:all) do
     I18n.enforce_available_locales = false
-    I18n.default_locale = :en # reset to default locale
+    I18n.default_locale = original_locale # reset to default locale
   end
 
   config.after(:all) do
-    I18n.default_locale = :en # reset to default locale
+    I18n.default_locale = original_locale # reset to default locale
   end
 end
 
@@ -42,5 +43,16 @@ def languages_response
       {code: 'en', is_base_language: true},
       {code: 'ja', is_base_language: false},
     ]
+  }
+end
+
+def config_hash
+  {
+    "api_key" => 'fakeapi',
+    "api_secret" => 'fakesecret',
+    "project_id" => 99,
+    "upload" => {
+      "is_keeping_all_strings" => true
+    }
   }
 end
