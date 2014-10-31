@@ -23,7 +23,7 @@ describe Onesky::Rails::Client do
         .to_return(status: 200, body: success_response.to_json)
 
       client = Onesky::Rails::Client.new(api_key, api_secret, project_id)
-      expect(client.onesky_locales).to eq(['ja', 'zh_TW'])
+      expect(client.onesky_locales).to eq(['ja'])
     end
 
     it 'with incorrect credentials' do

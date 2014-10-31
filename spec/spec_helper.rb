@@ -41,7 +41,6 @@ def languages_response
     [
       {code: 'en', is_base_language: true},
       {code: 'ja', is_base_language: false},
-      {code: 'zh-TW', is_base_language: false}
     ]
   }
 end
