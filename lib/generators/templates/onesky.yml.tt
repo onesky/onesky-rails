@@ -11,5 +11,5 @@ api_key: <%= config_hash[:api_key] %>
 api_secret: <%= config_hash[:api_secret] %>
 project_id: <%= config_hash[:project_id] %>
 
-push:
-  is_keeping_all_string: true
+upload:
+  is_keeping_all_strings: true
