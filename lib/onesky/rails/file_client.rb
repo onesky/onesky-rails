@@ -26,13 +26,11 @@ module Onesky
           puts "#{locale_dir(locale)}/"
           onesky_locale = locale.gsub('_', '-')
           files.each do |file|
-            translations = @project.export_translation(source_file_name: file, locale: onesky_locale)
-            locale_path = make_translation_dir(string_path, locale)
-            target_file = extract_file_name(translations.headers) || file
-            File.open(File.join(locale_path, target_file), 'w') do |f|
-              f.write(translations.force_encoding(ENCODING))
+            response = @project.export_translation(source_file_name: file, locale: onesky_locale)
+            if response.code == 200
+              saved_file = save_translation(response, string_path, locale, file)
+              puts "  #{saved_file}"
             end
-            puts "  #{target_file}"
           end
         end
       end
@@ -61,8 +59,17 @@ module Onesky
       def get_default_locale_files(string_path)
         Dir.glob("#{string_path}/**/*.yml").map do |path|
           content_hash = YAML.load_file(path)
-          path if content_hash.has_key?(@base_locale.to_s)
+          path if content_hash && content_hash.has_key?(@base_locale.to_s)
         end.compact
+      end
+
+      def save_translation(response, string_path, locale, file)
+        locale_path = make_translation_dir(string_path, locale)
+        target_file = extract_file_name(response.headers) || file
+        File.open(File.join(locale_path, target_file), 'w') do |f|
+          f.write(response.body.force_encoding(ENCODING))
+        end
+        target_file
       end
 
     end
