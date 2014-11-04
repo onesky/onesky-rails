@@ -11,6 +11,8 @@ module Onesky
       DIR_PREFIX  = 'onesky_'
 
       def upload(string_path)
+        verify_languages!
+
         get_default_locale_files(string_path).map do |path|
           filename = File.basename(path)
           puts "Uploading #{filename}"
@@ -20,6 +22,8 @@ module Onesky
       end
 
       def download(string_path)
+        verify_languages!
+
         files = get_default_locale_files(string_path).map {|path| File.basename(path)}
 
         @onesky_locales.each do |locale|

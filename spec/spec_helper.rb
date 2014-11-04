@@ -8,12 +8,12 @@ WebMock.disable_net_connect!(allow_localhost: true)
 
 RSpec.configure do |config|
   original_locale = I18n.default_locale
-  config.before(:all) do
+  config.before(:each) do
     I18n.enforce_available_locales = false
     I18n.default_locale = original_locale # reset to default locale
   end
 
-  config.after(:all) do
+  config.after(:each) do
     I18n.default_locale = original_locale # reset to default locale
   end
 end
@@ -38,7 +38,7 @@ def stub_language_request(api_key, api_secret, project_id)
 end
 
 def languages_response
-  {data: 
+  {data:
     [
       {code: 'en', is_base_language: true},
       {code: 'ja', is_base_language: false},

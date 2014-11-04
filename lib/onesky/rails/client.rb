@@ -16,8 +16,26 @@ module Onesky
         @project = @client.project(@config['project_id'].to_i)
         @base_locale = ::I18n.default_locale
         @onesky_locales = []
+      end
 
-        save_locales(get_languages_and_verify_config!)
+      def verify_languages!
+        languages = get_languages_from_onesky!
+        languages.each do |language|
+          locale = to_rails_locale(language['code'])
+          if (language['is_base_language'])
+            verify_base_locale!(locale)
+          else
+            @onesky_locales << locale
+          end
+        end
+      end
+
+      def to_onesky_locale(locale)
+        locale.gsub('_', '-')
+      end
+
+      def to_rails_locale(locale)
+        locale.gsub('-', '_')
       end
 
       private
@@ -26,22 +44,8 @@ module Onesky
         config.has_key?('api_key') && config.has_key?('api_secret') && config.has_key?('project_id')
       end
 
-      # Verify credentials and project access right
-      # by initial a request to retrieve languages
-      # @return  Array  Languages response from OneSky
-      def get_languages_and_verify_config!
+      def get_languages_from_onesky!
         JSON.parse(@project.list_language)['data']
-      end
-
-      def save_locales(languages)
-        languages.each do |lang|
-          locale = lang['code'].gsub('-', '_')
-          if lang['is_base_language']
-            verify_base_locale!(locale)
-          else
-            @onesky_locales << locale
-          end
-        end
       end
 
       def verify_base_locale!(locale)

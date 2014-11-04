@@ -16,35 +16,53 @@ describe Onesky::Rails::Client do
       expect{Onesky::Rails::Client.new({})}.to raise_error(ArgumentError)
     end
 
-    it 'save locale of languages activated at OneSky' do
-      stub_request(:get, full_path_with_auth_hash("/projects/#{config_hash['project_id']}/languages", config_hash['api_key'], config_hash['api_secret']))
-        .to_return(status: 200, body: languages_response.to_json)
+    # it 'save locale of languages activated at OneSky' do
+    #   stub_request(:get, full_path_with_auth_hash("/projects/#{config_hash['project_id']}/languages", config_hash['api_key'], config_hash['api_secret']))
+    #     .to_return(status: 200, body: languages_response.to_json)
 
-      client = Onesky::Rails::Client.new(config_hash)
-      expect(client.onesky_locales).to eq(['ja'])
+    #   client = Onesky::Rails::Client.new(config_hash)
+    #   expect(client.onesky_locales).to eq(['ja'])
+    # end
+
+    # it 'with incorrect project ID' do
+    #   stub_request(:get, full_path_with_auth_hash("/projects/#{config_hash['project_id']}/languages", config_hash['api_key'], config_hash['api_secret']))
+    #     .to_return(status: 403, body: {meta: {code: 403, message: 'No right to access project'}}.to_json)
+
+    #   expect {Onesky::Rails::Client.new(config_hash)}.to raise_error(Onesky::Errors::ForbiddenError, '403 Forbidden - No right to access project')
+    # end
+  end
+
+  describe '#verify_languages!' do
+    let(:client) {Onesky::Rails::Client.new(config_hash)}
+
+    context 'success' do
+      before(:each) do
+        stub_request(:get, full_path_with_auth_hash("/projects/#{config_hash['project_id']}/languages", config_hash['api_key'], config_hash['api_secret']))
+          .to_return(status: 200, body: languages_response.to_json)
+      end
+
+      it 'to retrieve languages activated at OneSky' do
+        expect{client.verify_languages!}.to_not raise_error
+        expect(client.onesky_locales).to eq(['ja'])
+      end
     end
 
-    it 'with incorrect credentials' do
-      stub_request(:get, full_path_with_auth_hash("/projects/#{config_hash['project_id']}/languages", config_hash['api_key'], config_hash['api_secret']))
-        .to_return(status: 401, body: {meta: {code: 401, message: 'Fail to authorize'}}.to_json)
+    context 'fail' do
+      it 'with incorrect credentials' do
+        stub_request(:get, full_path_with_auth_hash("/projects/#{config_hash['project_id']}/languages", config_hash['api_key'], config_hash['api_secret']))
+          .to_return(status: 401, body: {meta: {code: 401, message: 'Fail to authorize'}}.to_json)
 
-      expect {Onesky::Rails::Client.new(config_hash)}.to raise_error(Onesky::Errors::UnauthorizedError, '401 Unauthorized - Fail to authorize')
-    end
+        expect{client.verify_languages!}.to raise_error(Onesky::Errors::UnauthorizedError, '401 Unauthorized - Fail to authorize')
+      end
 
-    it 'with incorrect project ID' do
-      stub_request(:get, full_path_with_auth_hash("/projects/#{config_hash['project_id']}/languages", config_hash['api_key'], config_hash['api_secret']))
-        .to_return(status: 403, body: {meta: {code: 403, message: 'No right to access project'}}.to_json)
+      it 'with mis-match base locale' do
+        I18n.default_locale = :ja
 
-      expect {Onesky::Rails::Client.new(config_hash)}.to raise_error(Onesky::Errors::ForbiddenError, '403 Forbidden - No right to access project')
-    end
+        stub_request(:get, full_path_with_auth_hash("/projects/#{config_hash['project_id']}/languages", config_hash['api_key'], config_hash['api_secret']))
+          .to_return(status: 200, body: languages_response.to_json)
 
-    it 'with mis-match locale' do
-      I18n.default_locale = :ja
-
-      stub_request(:get, full_path_with_auth_hash("/projects/#{config_hash['project_id']}/languages", config_hash['api_key'], config_hash['api_secret']))
-        .to_return(status: 200, body: languages_response.to_json)
-
-      expect {Onesky::Rails::Client.new(config_hash)}.to raise_error(Onesky::Rails::BaseLanguageNotMatchError, 'The default locale (ja) of your Rails app doesn\'t match the base language (en) of the OneSky project')
+        expect{client.verify_languages!}.to raise_error(Onesky::Rails::BaseLanguageNotMatchError, 'The default locale (ja) of your Rails app doesn\'t match the base language (en) of the OneSky project')
+      end
     end
   end
 
