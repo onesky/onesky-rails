@@ -10,7 +10,7 @@ describe Onesky::Rails::FileClient do
   end
 
   context '#upload' do
-    it "uploads base locale YAML files" do
+    it 'strings to onesky' do
       stub_request(:post, full_path_with_auth_hash("/projects/#{config_hash['project_id']}/files", config_hash['api_key'], config_hash['api_secret']))
         .to_return(status: 201)
 
