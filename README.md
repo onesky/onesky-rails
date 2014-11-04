@@ -1,6 +1,6 @@
 # Onesky::Rails
 
-TODO: Write a gem description
+Integrate Rails app with [OneSky](http://www.oneskyapp.com) that provide `upload` and `download` rake command to sync string files
 
 ## Installation
 
@@ -18,7 +18,28 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+**Basic setup**
+```
+rails generate onesky:init <api_key> <api_secret> <project_id>
+```
+Generate config file at `config/onesky.yml`
+
+**Upload string files**
+```
+rake onesky:upload
+```
+Upload all string files of `I18n.default_locale` to [OneSky](http://www.oneskyapp.com). Note that default locale must match with base language of project.
+
+**Download translations**
+```
+rake onesky:download
+```
+Download translations of files uploaded in all languages activated in project.
+
+## TODO
+- Specify file to upload
+- Specify file and language to download
+- Support framework other than RoR
 
 ## Contributing
 
