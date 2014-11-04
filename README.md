@@ -1,5 +1,7 @@
 # Onesky::Rails
 
+[![Build Status](https://travis-ci.org/onesky/onesky-ruby.svg)](https://travis-ci.org/onesky/onesky-ruby)
+
 Integrate Rails app with [OneSky](http://www.oneskyapp.com) that provide `upload` and `download` rake command to sync string files
 
 ## Installation
