@@ -16,7 +16,7 @@ module Onesky
         get_default_locale_files(string_path).map do |path|
           filename = File.basename(path)
           puts "Uploading #{filename}"
-          @project.upload_file(file: path, file_format: FILE_FORMAT)
+          @project.upload_file(file: path, file_format: FILE_FORMAT, is_keeping_all_strings: is_keep_strings?)
           path
         end
       end
@@ -74,6 +74,12 @@ module Onesky
           f.write(response.body.force_encoding(ENCODING))
         end
         target_file
+      end
+
+      def is_keep_strings?
+        return true unless (@config.has_key?('upload') && @config['upload'].has_key?('is_keeping_all_strings'))
+
+        !!@config['upload']['is_keeping_all_strings']
       end
 
     end
