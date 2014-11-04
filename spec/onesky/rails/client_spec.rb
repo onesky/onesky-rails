@@ -15,21 +15,6 @@ describe Onesky::Rails::Client do
     it 'with invalid config' do
       expect{Onesky::Rails::Client.new({})}.to raise_error(ArgumentError)
     end
-
-    # it 'save locale of languages activated at OneSky' do
-    #   stub_request(:get, full_path_with_auth_hash("/projects/#{config_hash['project_id']}/languages", config_hash['api_key'], config_hash['api_secret']))
-    #     .to_return(status: 200, body: languages_response.to_json)
-
-    #   client = Onesky::Rails::Client.new(config_hash)
-    #   expect(client.onesky_locales).to eq(['ja'])
-    # end
-
-    # it 'with incorrect project ID' do
-    #   stub_request(:get, full_path_with_auth_hash("/projects/#{config_hash['project_id']}/languages", config_hash['api_key'], config_hash['api_secret']))
-    #     .to_return(status: 403, body: {meta: {code: 403, message: 'No right to access project'}}.to_json)
-
-    #   expect {Onesky::Rails::Client.new(config_hash)}.to raise_error(Onesky::Errors::ForbiddenError, '403 Forbidden - No right to access project')
-    # end
   end
 
   describe '#verify_languages!' do
