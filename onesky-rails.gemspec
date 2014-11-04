@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Victor Lam"]
   spec.email         = ["victorebox@yahoo.com.hk"]
   spec.summary       = "Rails plugin to sync string files with OneSky"
-  spec.description   = "Integrate Rails app with OneSky that provide `push` and `pull` rake command to sync string files"
+  spec.description   = "Integrate Rails app with OneSky that provide `upload` and `download` rake command to sync string files"
   spec.homepage      = "https://github.com/onesky/onesky-rails"
   spec.license       = "MIT"
 
