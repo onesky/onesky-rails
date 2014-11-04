@@ -13,8 +13,7 @@ namespace :onesky do
   end
 
   def file_client
-    config = YAML.load_file(Rails.root.join('config', 'onesky.yml'))
-    Onesky::Rails::FileClient.new config['api_key'], config['api_secret'], config['project_id']
+    Onesky::Rails::FileClient.new YAML.load_file(Rails.root.join('config', 'onesky.yml'))
   end
 
   def locale_path
