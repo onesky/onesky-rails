@@ -23,6 +23,7 @@ describe Onesky::Rails::Client do
     context 'success' do
       before(:each) do
         stub_request(:get, full_path_with_auth_hash("/projects/#{config_hash['project_id']}/languages", config_hash['api_key'], config_hash['api_secret']))
+          .with(headers: {'Content-Type' => 'application/json', 'Onesky-Plugin' => 'rails-string'})
           .to_return(status: 200, body: languages_response.to_json)
       end
 
