@@ -13,7 +13,9 @@ namespace :onesky do
   end
 
   def file_client
-    Onesky::Rails::FileClient.new YAML.load_file(Rails.root.join('config', 'onesky.yml'))
+    require 'erb'
+    data = YAML::load(ERB.new(File.read(Rails.root.join('config', 'onesky.yml'))).result)
+    Onesky::Rails::FileClient.new data
   end
 
   def locale_path
