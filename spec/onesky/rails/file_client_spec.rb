@@ -14,7 +14,7 @@ describe Onesky::Rails::FileClient do
       stub_request(:post, full_path_with_auth_hash("/projects/#{config_hash['project_id']}/files", config_hash['api_key'], config_hash['api_secret']))
         .to_return(status: 201)
 
-      expect(client.upload(file_path)).to eq(["#{file_path}/en.yml","#{file_path}/special_en.yml"])
+      expect(client.upload(file_path)).to match_array(["#{file_path}/en.yml","#{file_path}/special_en.yml"])
     end
   end
 
@@ -54,7 +54,7 @@ describe Onesky::Rails::FileClient do
 
       expect(locale_files).to be_empty
       client.download(file_path)
-      expect(locale_files).to eq(expected_locale_files)
+      expect(locale_files).to match_array(expected_locale_files)
     end
 
     def prepare_download_requests!
