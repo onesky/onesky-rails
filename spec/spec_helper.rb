@@ -46,7 +46,7 @@ def languages_response
   }
 end
 
-def config_hash
+def create_config_hash
   {
     "api_key" => 'fakeapi',
     "api_secret" => 'fakesecret',

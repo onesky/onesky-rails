@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe Onesky::Rails::Client do
+  let(:config_hash) { create_config_hash }
 
   describe '#new' do
 
@@ -30,6 +31,17 @@ describe Onesky::Rails::Client do
       it 'to retrieve languages activated at OneSky' do
         expect{client.verify_languages!}.to_not raise_error
         expect(client.onesky_locales).to eq(['ja'])
+      end
+
+      context 'with explicit base locale and different default locale' do
+        let(:config_hash) { create_config_hash.merge({'base_locale' => 'en'}) }
+
+        it 'to retrieve languages activated at OneSky' do
+          I18n.default_locale = :ja
+
+          expect{client.verify_languages!}.to_not raise_error
+          expect(client.onesky_locales).to eq(['ja'])
+        end
       end
     end
 
