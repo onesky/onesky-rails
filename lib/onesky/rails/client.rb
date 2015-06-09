@@ -15,7 +15,7 @@ module Onesky
         @client = ::Onesky::Client.new(@config['api_key'], @config['api_secret'])
         @client.plugin_code = 'rails-string'
         @project = @client.project(@config['project_id'].to_i)
-        @base_locale = ::I18n.default_locale
+        @base_locale = config_hash.fetch('base_locale', ::I18n.default_locale)
         @onesky_locales = []
       end
 

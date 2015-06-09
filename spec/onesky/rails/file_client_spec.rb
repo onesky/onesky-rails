@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe Onesky::Rails::FileClient do
 
+  let(:config_hash) { create_config_hash }
   let(:client) {Onesky::Rails::FileClient.new(config_hash)}
   let(:file_path) { File.expand_path("../../../fixtures/locales", __FILE__) }
 
