@@ -52,19 +52,14 @@ NOTICE
         DIR_PREFIX + locale
       end
 
-      def extract_file_name(header_hash)
-        search_text = 'filename='
-        if disposition = header_hash[:content_disposition]
-          if idx = disposition.index(search_text)
-            disposition[(idx + search_text.length)..-1]
-          end
-        end
-      end
-
       def make_translation_dir(dir_path, locale)
         target_path = File.join(dir_path, locale_dir(locale))
         Dir.mkdir(target_path) unless File.directory?(target_path)
         target_path
+      end
+
+      def locale_file_name(file, to_locale)
+        file.sub(@base_locale.to_s, to_locale)
       end
 
       def get_default_locale_files(string_path)
@@ -76,7 +71,8 @@ NOTICE
 
       def save_translation(response, string_path, locale, file)
         locale_path = make_translation_dir(string_path, locale)
-        target_file = extract_file_name(response.headers) || file
+        target_file = locale_file_name(file, locale)
+
         File.open(File.join(locale_path, target_file), 'w') do |f|
           f.write(TRANSLATION_NOTICE + response.body.force_encoding(ENCODING))
         end
