@@ -8,3 +8,9 @@
 
 * Add custom header
 * bump version to 1.0.0 as stable version
+
+### 1.1.0 - 9-JUN-2015
+
+* fix download multiple files
+* able to parse ERB template
+* able to customize base_locale
