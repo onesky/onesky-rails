@@ -14,3 +14,7 @@
 * fix download multiple files
 * able to parse ERB template
 * able to customize base_locale
+
+### 1.2.0 - 13-JUL-2015
+
+* support custom locale
