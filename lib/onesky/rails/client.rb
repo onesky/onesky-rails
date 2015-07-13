@@ -22,7 +22,7 @@ module Onesky
       def verify_languages!
         languages = get_languages_from_onesky!
         languages.each do |language|
-          locale = to_rails_locale(language['code'])
+          locale = language['custom_locale'] || to_rails_locale(language['code'])
           if (language['is_base_language'])
             verify_base_locale!(locale)
           else
