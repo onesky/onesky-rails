@@ -47,6 +47,20 @@ def languages_response
   }
 end
 
+def stub_project_language_request(response)
+  stub_request(:get, full_path_with_auth_hash("/projects/#{config_hash['project_id']}/languages", config_hash['api_key'], config_hash['api_secret']))
+    .with(headers: {'Content-Type' => 'application/json', 'Onesky-Plugin' => 'rails-string'})
+    .to_return(status: 200, body: response.to_json)
+end
+
+def custom_locale_response
+  {data:
+    [
+      {code: 'es-ES', custom_locale: 'es'},
+    ]
+  }
+end
+
 def create_config_hash
   {
     "api_key" => 'fakeapi',

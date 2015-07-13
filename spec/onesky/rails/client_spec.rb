@@ -23,9 +23,7 @@ describe Onesky::Rails::Client do
 
     context 'success' do
       before(:each) do
-        stub_request(:get, full_path_with_auth_hash("/projects/#{config_hash['project_id']}/languages", config_hash['api_key'], config_hash['api_secret']))
-          .with(headers: {'Content-Type' => 'application/json', 'Onesky-Plugin' => 'rails-string'})
-          .to_return(status: 200, body: languages_response.to_json)
+        stub_project_language_request(languages_response)
       end
 
       it 'to retrieve languages activated at OneSky' do
@@ -42,6 +40,17 @@ describe Onesky::Rails::Client do
           expect{client.verify_languages!}.to_not raise_error
           expect(client.onesky_locales).to eq(['ja'])
         end
+      end
+    end
+
+    context 'success with custom locale' do
+      before(:each) do
+        stub_project_language_request(custom_locale_response)
+      end
+
+      it 'to use custom locale' do
+        expect{client.verify_languages!}.to_not raise_error
+        expect(client.onesky_locales).to eq(['es'])
       end
     end
 
