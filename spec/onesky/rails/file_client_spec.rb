@@ -6,16 +6,40 @@ describe Onesky::Rails::FileClient do
   let(:client) {Onesky::Rails::FileClient.new(config_hash)}
   let(:file_path) { File.expand_path("../../../fixtures/locales", __FILE__) }
 
+  def create_config_hash_with_upload_options(upload_options)
+    create_config_hash.tap do |config|
+      config['upload'].merge!(upload_options)
+    end
+  end
+
   before(:each) do
     stub_language_request(config_hash['api_key'], config_hash['api_secret'], config_hash['project_id'])
   end
 
   context '#upload' do
-    it 'all translation files to onesky' do
+    before(:each) do
       stub_request(:post, full_path_with_auth_hash("/projects/#{config_hash['project_id']}/files", config_hash['api_key'], config_hash['api_secret']))
         .to_return(status: 201)
+    end
 
+    it 'all translation files to onesky' do
       expect(client.upload(file_path)).to match_array(["#{file_path}/en.yml","#{file_path}/special_en.yml"])
+    end
+
+    context 'with `only` option' do
+      let(:config_hash) { create_config_hash_with_upload_options('only' => 'special_en.yml') }
+
+      it 'matching translation files to onesky' do
+        expect(client.upload(file_path)).to match_array(["#{file_path}/special_en.yml"])
+      end
+    end
+
+    context 'with `except` option' do
+      let(:config_hash) { create_config_hash_with_upload_options('except' => 'special_en.yml') }
+
+      it 'matching translation files to onesky' do
+        expect(client.upload(file_path)).to match_array(["#{file_path}/en.yml"])
+      end
     end
   end
 
@@ -44,6 +68,7 @@ describe Onesky::Rails::FileClient do
 
     before(:each) do
       delete_test_dir
+      prepare_download_requests!
     end
 
     after(:each) do
@@ -51,11 +76,31 @@ describe Onesky::Rails::FileClient do
     end
 
     it 'download translations from OneSky and save as YAML files' do
-      prepare_download_requests!
-
       expect(locale_files).to be_empty
       client.download(file_path)
       expect(locale_files).to match_array(expected_locale_files)
+    end
+
+    context 'with `only` option' do
+      let(:config_hash) { create_config_hash_with_upload_options('only' => 'special_en.yml') }
+      let(:expected_locale_files) { ["#{locale_dir}/special_ja.yml"] }
+
+      it 'downloads matching translation from OneSky and save as YAML files' do
+        expect(locale_files).to be_empty
+        client.download(file_path)
+        expect(locale_files).to match_array(expected_locale_files)
+      end
+    end
+
+    context 'with `except` option' do
+      let(:config_hash) { create_config_hash_with_upload_options('except' => 'special_en.yml') }
+      let(:expected_locale_files) { ["#{locale_dir}/ja.yml"] }
+
+      it 'downloads matching translation from OneSky and save as YAML files' do
+        expect(locale_files).to be_empty
+        client.download(file_path)
+        expect(locale_files).to match_array(expected_locale_files)
+      end
     end
 
     def prepare_download_requests!

@@ -63,7 +63,11 @@ NOTICE
       end
 
       def get_default_locale_files(string_path)
+        string_path = Pathname.new(string_path)
+        locale_files_filter = generate_locale_files_filter
         Dir.glob("#{string_path}/**/*.yml").map do |path|
+          relative_path = Pathname.new(path).relative_path_from(string_path).to_s
+          next if locale_files_filter && !locale_files_filter.call(relative_path)
           content_hash = YAML.load_file(path)
           path if content_hash && content_hash.has_key?(@base_locale.to_s)
         end.compact
@@ -80,9 +84,28 @@ NOTICE
       end
 
       def is_keep_strings?
-        return true unless (@config.has_key?('upload') && @config['upload'].has_key?('is_keeping_all_strings'))
+        return true unless upload_config.has_key?('is_keeping_all_strings')
 
-        !!@config['upload']['is_keeping_all_strings']
+        !!upload_config['is_keeping_all_strings']
+      end
+
+      def generate_locale_files_filter
+        only = Array(upload_config['only'])
+        except = Array(upload_config['except'])
+
+        if only.any? && except.any?
+          raise ArgumentError, "Invalid config. Can't use both `only` and `except` options."
+        end
+
+        if only.any?
+          ->(path) { only.include?(path) }
+        elsif except.any?
+          ->(path) { !except.include?(path) }
+        end
+      end
+
+      def upload_config
+        @config['upload'] ||= {}
       end
 
     end
