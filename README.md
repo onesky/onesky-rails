@@ -41,7 +41,7 @@ Download translations of files uploaded in all languages activated in project.
 ## TODO
 - Specify file to upload
 - Specify file and language to download
-- Support framework other than RoR
+- Support different backend
 
 ## Contributing
 
