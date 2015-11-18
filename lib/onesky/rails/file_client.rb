@@ -59,7 +59,7 @@ NOTICE
       end
 
       def locale_file_name(file, to_locale)
-        file.sub(to_rails_locale(@base_locale.to_s), to_locale)
+        file.sub(@base_locale.to_s, to_locale)
       end
 
       def get_default_locale_files(string_path)
