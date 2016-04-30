@@ -12,7 +12,7 @@ module Onesky
         end
 
         @config = config_hash
-        @client = ::Onesky::Client.new(@config['api_key'], @config['api_secret'], debug: @config['debug'])
+        @client = initialize_onesky_client
         @client.plugin_code = 'rails-string'
         @project = @client.project(@config['project_id'].to_i)
         @base_locale = config_hash.fetch('base_locale', ::I18n.default_locale)
@@ -44,6 +44,19 @@ module Onesky
       end
 
       private
+
+      #
+      # onesky-ruby version 1.0.1 and lower has only 2 parameters (no options)
+      # while the higer versions have the third parameter.
+      #
+      def initialize_onesky_client
+        if Gem::Version.new(Onesky::VERSION) <= Gem::Version.new('1.0.1')
+          ::Onesky::Client.new(@config['api_key'], @config['api_secret'])
+        else
+          ::Onesky::Client.new(@config['api_key'], @config['api_secret'],
+                               debug: @config['debug'])
+        end
+      end
 
       def is_valid_config!(config)
         config.has_key?('api_key') && config.has_key?('api_secret') && config.has_key?('project_id')
