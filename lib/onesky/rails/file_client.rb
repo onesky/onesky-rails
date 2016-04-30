@@ -37,6 +37,7 @@ NOTICE
           puts "#{locale_dir(locale)}/"
           onesky_locale = locale.gsub('_', '-')
           files.each do |file|
+            puts "Source file #{file} (locale: #{onesky_locale}) ..." if debug?
             response = @project.export_translation(source_file_name: file, locale: onesky_locale)
             if response.code == 200
               saved_file = save_translation(response, string_path, locale, file)

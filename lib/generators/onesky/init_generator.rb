@@ -7,6 +7,7 @@ module Onesky
       argument :api_key,     :type => :string,  :desc => "API Key"
       argument :api_secret,  :type => :string,  :desc => "API Secret"
       argument :project_id,  :type => :string,  :desc => "Project ID"
+      argument :debug,       :type => :boolean, :desc => "Enable debug info", :default => false
 
       class_option :force,   :type => :boolean, :default => false, :desc => "Overwrite if config file already exists"
 

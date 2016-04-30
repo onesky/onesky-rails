@@ -12,7 +12,7 @@ module Onesky
         end
 
         @config = config_hash
-        @client = ::Onesky::Client.new(@config['api_key'], @config['api_secret'])
+        @client = ::Onesky::Client.new(@config['api_key'], @config['api_secret'], debug: @config['debug'])
         @client.plugin_code = 'rails-string'
         @project = @client.project(@config['project_id'].to_i)
         @base_locale = config_hash.fetch('base_locale', ::I18n.default_locale)
@@ -37,6 +37,10 @@ module Onesky
 
       def to_rails_locale(locale)
         locale.gsub('-', '_')
+      end
+
+      def debug?
+        @config['debug']
       end
 
       private
