@@ -28,8 +28,11 @@ NOTICE
         end
       end
 
-      def download(string_path)
-        verify_languages!
+      def download(string_path, options = {})
+        options[:base_only] ||= false
+        options[:all] ||= false
+
+        verify_languages!(base_only: options[:base_only], all: options[:all])
 
         files = get_default_locale_files(string_path).map {|path| File.basename(path)}
 
