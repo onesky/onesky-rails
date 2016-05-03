@@ -19,16 +19,30 @@ module Onesky
         @onesky_locales = []
       end
 
-      def verify_languages!
+      def verify_languages!(options = {})
         languages = get_languages_from_onesky!
         languages.each do |language|
           locale = language['custom_locale'] || to_rails_locale(language['code'])
-          if (language['is_base_language'])
-            verify_base_locale!(locale)
-          else
-            @onesky_locales << locale
-          end
+
+          verify_base_locale!(locale) if language['is_base_language']
+
+          @onesky_locales << locale if allowed_for?(language, options)
         end
+      end
+
+      #
+      # Determine if a language will be used to be downloaded or not.
+      #
+      # With options[:all] == true, all the languages will be used.
+      # With options[:base_only] == true, only the base language of the project
+      # will be used to download tranlsation file.
+      # Otherwise, this method will allow only other languages than the base
+      # language.
+      #
+      def allowed_for?(language, options)
+        return true if options[:all] == true
+        return true if language['is_base_language'] && options[:base_only] == true
+        language['is_base_language'] == false && options[:base_only] == false
       end
 
       def to_onesky_locale(locale)

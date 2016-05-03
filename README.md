@@ -36,7 +36,21 @@ Upload all string files of `I18n.default_locale` to [OneSky](http://www.oneskyap
 ```
 rake onesky:download
 ```
-Download translations of files uploaded in all languages activated in project.
+Download translations of files uploaded in all languages activated in project
+other than the base language.
+
+**Download base language translations**
+```
+rake onesky:download_base
+```
+Download translations of files uploaded only for the base language.
+
+**Download all languages translations**
+```
+rake onesky:download_all
+```
+Download translations of files uploaded for all the languages including the base
+language.
 
 ## TODO
 - Specify file to upload
