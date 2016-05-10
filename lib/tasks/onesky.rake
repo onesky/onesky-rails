@@ -1,12 +1,12 @@
 namespace :onesky do
 
-  desc "Upload string files of base locale to OneSky platform."
+  desc 'Upload string files of base locale to OneSky platform.'
   task :upload => :environment do
     file_client.upload(locale_path)
     puts 'Done!'
   end
 
-  desc "Download translations from OneSky platform."
+  desc 'Download translations from OneSky platform.'
   task :download => :environment do
     file_client.download(locale_path)
     puts 'Done!'
@@ -19,7 +19,7 @@ namespace :onesky do
   end
 
   def locale_path
-    Rails.root.join("config/locales")
+    Rails.root.join('config/locales')
   end
 
 end
