@@ -44,6 +44,8 @@ NOTICE
 
         locales = if options[:base_only]
           [@base_locale]
+        elsif options[:all]
+          [@base_locale] + @onesky_locales
         else
           @onesky_locales
         end
