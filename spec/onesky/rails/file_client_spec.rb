@@ -51,21 +51,21 @@ describe Onesky::Rails::FileClient do
     end
 
     it 'download translations from OneSky and save as YAML files' do
-      prepare_download_requests!
+      prepare_download_requests!('ja')
 
       expect(locale_files).to be_empty
       client.download(file_path)
       expect(locale_files).to match_array(expected_locale_files)
     end
 
-    def prepare_download_requests!
+    def prepare_download_requests!(locale)
       Timecop.freeze
       file_names.each do |file_name|
         response_headers = {
           'Content-Type'        => 'text/plain',
           'Content-Disposition' => "attachment; filename=#{file_name}",
         }
-        query_string = "&source_file_name=#{file_name}&locale=ja"
+        query_string = "&source_file_name=#{file_name}&locale=#{locale}"
         stub_request(:get, full_path_with_auth_hash("/projects/#{config_hash['project_id']}/translations", config_hash['api_key'], config_hash['api_secret']) + query_string)
           .to_return(
             status: 200,
