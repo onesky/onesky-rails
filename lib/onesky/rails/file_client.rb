@@ -28,12 +28,28 @@ NOTICE
         end
       end
 
-      def download(string_path)
+      ##
+      # Download translations from OneSky platform
+      #
+      # +string_path+ specify the folder path where all localization files locate
+      # +options+     indicate which files to download
+      #               - :base_only => base language only
+      #               - :all       => all languages including base language
+      #               - <empty>    => default value; translation languages
+      #
+      def download(string_path, options = {})
         verify_languages!
 
         files = get_default_locale_files(string_path).map {|path| File.basename(path)}
 
-        @onesky_locales.each do |locale|
+        locales = if options[:base_only]
+          [@base_locale]
+        else
+          @onesky_locales
+        end
+
+        locales.each do |locale|
+          locale = locale.to_s
           puts "#{locale_dir(locale)}/"
           onesky_locale = locale.gsub('_', '-')
           files.each do |file|
