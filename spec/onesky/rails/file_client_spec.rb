@@ -69,6 +69,24 @@ describe Onesky::Rails::FileClient do
       expect(content).to eq(expected_content)
     end
 
+    it 'download all translations including base language from OneSky' do
+      locales = ['en', 'ja']
+      locales.each { |locale| prepare_download_requests!(locale) }
+
+      client.download(file_path, all: true)
+
+      locales.each do |locale|
+        # test files created
+        expected_files = expected_locale_files(locale)
+        expect(locale_files(locale)).to match_array(expected_files)
+
+        # test file content
+        content = YAML.load_file(expected_files.pop)
+        expected_content = YAML.load_file(File.join(sample_file_path, locale, "special_#{locale}.yml"))
+        expect(content).to eq(expected_content)
+      end
+    end
+
     def prepare_download_requests!(locale)
       Timecop.freeze
       file_names.each do |file_name|
