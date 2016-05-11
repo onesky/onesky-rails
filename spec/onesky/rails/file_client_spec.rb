@@ -55,15 +55,16 @@ describe Onesky::Rails::FileClient do
     def prepare_download_requests!(locale)
       Timecop.freeze
       file_names.each do |file_name|
+        downloaded_file_name = file_name.sub(/en/, locale)
         response_headers = {
           'Content-Type'        => 'text/plain',
-          'Content-Disposition' => "attachment; filename=#{file_name}",
+          'Content-Disposition' => "attachment; filename=#{downloaded_file_name}",
         }
         query_string = "&source_file_name=#{file_name}&locale=#{locale}"
         stub_request(:get, full_path_with_auth_hash("/projects/#{config_hash['project_id']}/translations", config_hash['api_key'], config_hash['api_secret']) + query_string)
           .to_return(
             status: 200,
-            body: File.read(File.join(sample_file_path, 'ja', file_name.sub(/en/, 'ja'))),
+            body: File.read(File.join(sample_file_path, locale, downloaded_file_name)),
             headers: response_headers)
       end
     end
