@@ -69,6 +69,8 @@ NOTICE
       end
 
       def make_translation_dir(dir_path, locale)
+        return dir_path if locale == @base_locale.to_s
+
         target_path = File.join(dir_path, locale_dir(locale))
         Dir.mkdir(target_path) unless File.directory?(target_path)
         target_path
