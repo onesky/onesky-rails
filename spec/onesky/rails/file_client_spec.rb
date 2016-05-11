@@ -11,7 +11,7 @@ describe Onesky::Rails::FileClient do
     stub_language_request(config_hash['api_key'], config_hash['api_secret'], config_hash['project_id'])
 
     # create test dir
-    FileUtils.copy_entry "#{sample_file_path}/en", file_path
+    FileUtils.copy_entry "#{sample_file_path}/original", file_path
   end
 
   after(:each) do
@@ -30,26 +30,43 @@ describe Onesky::Rails::FileClient do
 
   context 'download' do
 
-    let(:expected_locale_files) do
-      ["#{locale_dir}/ja.yml", "#{locale_dir}/special_ja.yml"]
-    end
-
     let(:file_names) {['en.yml', 'special_en.yml']}
 
-    def locale_dir
-      File.join(file_path, 'onesky_ja')
+    def locale_dir(locale)
+      locale == I18n.default_locale.to_s ? file_path : File.join(file_path, 'onesky_ja')
     end
 
-    def locale_files
-      Dir.glob("#{locale_dir}/*.yml")
+    def locale_files(locale)
+      Dir.glob("#{locale_dir(locale)}/*.yml")
+    end
+
+    def expected_locale_files(locale)
+      ["#{locale_dir(locale)}/#{locale}.yml", "#{locale_dir(locale)}/special_#{locale}.yml"]
     end
 
     it 'download translations from OneSky and save as YAML files' do
-      prepare_download_requests!('ja')
+      locale = 'ja'
+      prepare_download_requests!(locale)
 
-      expect(locale_files).to be_empty
+      expect(locale_files(locale)).to be_empty
       client.download(file_path)
-      expect(locale_files).to match_array(expected_locale_files)
+      expect(locale_files(locale)).to match_array(expected_locale_files(locale))
+    end
+
+    it 'download translations of base language from OneSky' do
+      locale = 'en'
+      prepare_download_requests!(locale)
+
+      client.download(file_path, base_only: true)
+
+      # test files created
+      expected_files = expected_locale_files(locale)
+      expect(locale_files(locale)).to match_array(expected_files)
+
+      # test file content
+      content = YAML.load_file(expected_files.pop)
+      expected_content = YAML.load_file(File.join(sample_file_path, locale, 'special_en.yml'))
+      expect(content).to eq(expected_content)
     end
 
     def prepare_download_requests!(locale)
