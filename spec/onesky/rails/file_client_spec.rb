@@ -4,10 +4,19 @@ describe Onesky::Rails::FileClient do
 
   let(:config_hash) { create_config_hash }
   let(:client) {Onesky::Rails::FileClient.new(config_hash)}
+  let(:sample_file_path) { File.expand_path("../../../fixtures/sample_files", __FILE__) }
   let(:file_path) { File.expand_path("../../../fixtures/locales", __FILE__) }
 
   before(:each) do
     stub_language_request(config_hash['api_key'], config_hash['api_secret'], config_hash['project_id'])
+
+    # create test dir
+    FileUtils.copy_entry "#{sample_file_path}/en", file_path
+  end
+
+  after(:each) do
+    # delete test dir
+    FileUtils.remove_dir(file_path) if File.directory?(file_path)
   end
 
   context '#upload' do
@@ -35,21 +44,6 @@ describe Onesky::Rails::FileClient do
       Dir.glob("#{locale_dir}/*.yml")
     end
 
-    def delete_test_dir
-      if File.directory?(locale_dir)
-        File.delete(*Dir.glob("#{locale_dir}/**/*"))
-        Dir.delete(locale_dir)
-      end
-    end
-
-    before(:each) do
-      delete_test_dir
-    end
-
-    after(:each) do
-      delete_test_dir
-    end
-
     it 'download translations from OneSky and save as YAML files' do
       prepare_download_requests!('ja')
 
@@ -69,7 +63,7 @@ describe Onesky::Rails::FileClient do
         stub_request(:get, full_path_with_auth_hash("/projects/#{config_hash['project_id']}/translations", config_hash['api_key'], config_hash['api_secret']) + query_string)
           .to_return(
             status: 200,
-            body: File.read(File.join(file_path, file_name)),
+            body: File.read(File.join(sample_file_path, 'ja', file_name.sub(/en/, 'ja'))),
             headers: response_headers)
       end
     end
