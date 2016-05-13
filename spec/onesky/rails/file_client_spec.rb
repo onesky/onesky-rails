@@ -24,13 +24,13 @@ describe Onesky::Rails::FileClient do
       stub_request(:post, full_path_with_auth_hash("/projects/#{config_hash['project_id']}/files", config_hash['api_key'], config_hash['api_secret']))
         .to_return(status: 201)
 
-      expect(client.upload(file_path)).to match_array(["#{file_path}/en.yml","#{file_path}/special_en.yml"])
+      expect(client.upload(file_path)).to match_array(["#{file_path}/en.yml","#{file_path}/menu.yml"])
     end
   end
 
   context 'download' do
 
-    let(:file_names) {['en.yml', 'special_en.yml']}
+    let(:file_names) {['en.yml', 'menu.yml']}
 
     def locale_dir(locale)
       locale == I18n.default_locale.to_s ? file_path : File.join(file_path, 'onesky_ja')
@@ -41,7 +41,7 @@ describe Onesky::Rails::FileClient do
     end
 
     def expected_locale_files(locale)
-      ["#{locale_dir(locale)}/#{locale}.yml", "#{locale_dir(locale)}/special_#{locale}.yml"]
+      ["#{locale_dir(locale)}/#{locale}.yml", "#{locale_dir(locale)}/menu.yml"]
     end
 
     it 'download translations from OneSky and save as YAML files' do
@@ -65,7 +65,7 @@ describe Onesky::Rails::FileClient do
 
       # test file content
       content = YAML.load_file(expected_files.pop)
-      expected_content = YAML.load_file(File.join(sample_file_path, locale, 'special_en.yml'))
+      expected_content = YAML.load_file(File.join(sample_file_path, locale, 'menu.yml'))
       expect(content).to eq(expected_content)
     end
 
@@ -82,7 +82,7 @@ describe Onesky::Rails::FileClient do
 
         # test file content
         content = YAML.load_file(expected_files.pop)
-        expected_content = YAML.load_file(File.join(sample_file_path, locale, "special_#{locale}.yml"))
+        expected_content = YAML.load_file(File.join(sample_file_path, locale, "menu.yml"))
         expect(content).to eq(expected_content)
       end
     end
@@ -90,7 +90,7 @@ describe Onesky::Rails::FileClient do
     def prepare_download_requests!(locale)
       Timecop.freeze
       file_names.each do |file_name|
-        downloaded_file_name = file_name.sub(/en/, locale)
+        downloaded_file_name = client.locale_file_name(file_name, locale)
         response_headers = {
           'Content-Type'        => 'text/plain',
           'Content-Disposition' => "attachment; filename=#{downloaded_file_name}",
