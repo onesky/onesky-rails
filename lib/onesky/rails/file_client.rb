@@ -79,7 +79,11 @@ NOTICE
       end
 
       def locale_file_name(file, to_locale)
-        file.sub(@base_locale.to_s, to_locale)
+        if File.basename(file, '.*') == @base_locale.to_s
+          file.sub(@base_locale.to_s, to_locale)
+        else
+          file
+        end
       end
 
       def get_default_locale_files(string_path)
