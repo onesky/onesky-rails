@@ -30,7 +30,13 @@ describe Onesky::Rails::FileClient do
 
   context 'download' do
 
-    let(:file_names) {['en.yml', 'menu.yml']}
+    let(:file_names) do
+      # source filename => downloaded filename
+      {
+        'en.yml' => {'en' => 'en.yml', 'ja' => 'ja.yml'},
+        'menu.yml' => {'en' => 'menu.yml', 'ja' => 'menu.yml'}
+      }
+    end
 
     def locale_dir(locale)
       locale == I18n.default_locale.to_s ? file_path : File.join(file_path, 'onesky_ja')
@@ -89,8 +95,8 @@ describe Onesky::Rails::FileClient do
 
     def prepare_download_requests!(locale)
       Timecop.freeze
-      file_names.each do |file_name|
-        downloaded_file_name = client.locale_file_name(file_name, locale)
+      file_names.keys.each do |file_name|
+        downloaded_file_name = file_names[file_name][locale]
         response_headers = {
           'Content-Type'        => 'text/plain',
           'Content-Disposition' => "attachment; filename=#{downloaded_file_name}",
