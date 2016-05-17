@@ -1,13 +1,15 @@
-### 0.0.1 - 4-NOV-2014
+### 1.3.1 - 17-MAY-2016
 
-* Generate config file
-* Upload base locale string files to OneSky
-* Download translations from OneSky
+* fix downloaded file naming
 
-### 1.0.0 - 31-DEC-2014
+### 1.3.0 - 13-MAY-2016
 
-* Add custom header
-* bump version to 1.0.0 as stable version
+* support download base language only translation files
+* support download all translation files
+
+### 1.2.0 - 13-JUL-2015
+
+* support custom locale
 
 ### 1.1.0 - 9-JUN-2015
 
@@ -15,11 +17,13 @@
 * able to parse ERB template
 * able to customize base_locale
 
-### 1.2.0 - 13-JUL-2015
+### 1.0.0 - 31-DEC-2014
 
-* support custom locale
+* Add custom header
+* bump version to 1.0.0 as stable version
 
-### 1.3.0 - 13-MAY-2016
+### 0.0.1 - 4-NOV-2014
 
-* support download base language only translation files
-* support download all translation files
+* Generate config file
+* Upload base locale string files to OneSky
+* Download translations from OneSky
