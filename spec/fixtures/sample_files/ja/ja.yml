@@ -7,3 +7,7 @@ ja:
     thu: 木曜日
     fri: 金曜日
     sat: 土曜日
+  date:
+    year: 年
+    month: 月
+    day: 日
