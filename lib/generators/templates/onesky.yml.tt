@@ -13,3 +13,9 @@ project_id: <%= config_hash[:project_id] %>
 
 upload:
   is_keeping_all_strings: true
+  # Uncomment one of these to filter files in your locales directory
+  # only:
+  #   - cms/en.yml
+  # except:
+  #   - admin.yml
+  #   - rails.yml
