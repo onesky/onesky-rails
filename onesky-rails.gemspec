@@ -19,11 +19,11 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency "i18n", ">= 0.5.0"
-  spec.add_dependency "onesky-ruby", "~> 1.0.0"
+  spec.add_dependency "onesky-ruby", "~> 1.1.0"
 
-  spec.add_development_dependency "bundler", "~> 1.5"
-  spec.add_development_dependency "rake", "~> 10.3"
-  spec.add_development_dependency "rspec", "~> 3.1.0"
-  spec.add_development_dependency "timecop", "~> 0.7.0"
-  spec.add_development_dependency "webmock", "~> 1.19.0"
+  spec.add_development_dependency "bundler", "~> 1.16"
+  spec.add_development_dependency "rake", "~> 12.3"
+  spec.add_development_dependency "rspec", "~> 3.7.0"
+  spec.add_development_dependency "timecop", "~> 0.9.0"
+  spec.add_development_dependency "webmock", "~> 3.0.0"
 end

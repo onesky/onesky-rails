@@ -1,3 +1,7 @@
+### Unreleased
+
+* Update dependencies to support Ruby 2.5.0
+
 ### 1.3.1 - 17-MAY-2016
 
 * fix downloaded file naming
