@@ -27,3 +27,7 @@
 * Generate config file
 * Upload base locale string files to OneSky
 * Download translations from OneSky
+
+### Future release
+
+* Update dependencies to support Ruby 2.5.x
