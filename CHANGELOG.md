@@ -1,3 +1,7 @@
+### 1.4.1 - 11-JUN-2019
+
+* Update dependencies to support Ruby 2.5.x
+
 ### 1.3.1 - 17-MAY-2016
 
 * fix downloaded file naming
@@ -27,7 +31,3 @@
 * Generate config file
 * Upload base locale string files to OneSky
 * Download translations from OneSky
-
-### Future release
-
-* Update dependencies to support Ruby 2.5.x
