@@ -1,3 +1,8 @@
+### 1.6.0 - 12-AUG-2021
+
+* Update dependencies to support Ruby 3.0.x
+* Use v1.3.1 onesky-ruby gem
+
 ### 1.5.0 - 18-OCT-2019
 
 * Use v1.2.0 onesky-ruby gem
